@@ -3,13 +3,15 @@ package com.example.permissions
 import android.Manifest
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+
 
 class RequestPermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,26 +50,35 @@ class RequestPermissionActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED)
             ) {
-                // FIXME сюда не переходит!
                 Log.d(TAG, "Camera permitted")
                 updateStatus()
 
             } else {
-                // show alert dialog
-                Log.d(TAG, "Camera not permitted, before showing alert dialog")
-                //
-                AlertDialog.Builder(this).setTitle("Alert")
-                    .setMessage("We really need camera permission.")
-                    .setPositiveButton("OK") { _, _ ->
-                        requestCameraPermission()
-                    }
-                    .setNegativeButton("NO") { _, _ ->
-                        Log.d(TAG, "Camera permission is still DENIED")
-                        Toast.makeText(this, "Camera permission is still DENIED", Toast.LENGTH_SHORT).show()
-                    }
-                    .show()
+                requestPermissionWithRationale()
             }
             return
+        }
+    }
+
+    private fun requestPermissionWithRationale() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                CAMERA)
+        ) {
+            // show alert dialog
+            Log.d(TAG, "Camera not permitted, before showing alert dialog")
+            //
+            AlertDialog.Builder(this).setTitle("Alert")
+                .setMessage("We really need camera permission.")
+                .setPositiveButton("OK") { _, _ ->
+                    requestCameraPermission()
+                }
+                .setNegativeButton("NO") { _, _ ->
+                    Log.d(TAG, "Camera permission is still DENIED")
+                    Toast.makeText(this, "Camera permission is still DENIED", Toast.LENGTH_SHORT).show()
+                }
+                .show()
+        } else {
+            requestCameraPermission()
         }
     }
 
