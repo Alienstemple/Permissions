@@ -22,5 +22,10 @@ class MainActivity : AppCompatActivity() {
             intent = Intent(this, RequestPermissionListenerActivity::class.java)
             startActivity(intent)
         }
+
+        mainBinding.reqPermAsExample.setOnClickListener {
+            intent = Intent(this, RequestPermissionAsInExample::class.java)
+            startActivity(intent)
+        }
     }
 }
