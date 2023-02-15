@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Permissions</string>
+    <string name="request_permission">Request permission</string>
+    <string name="request_permission_with_listener">Request permission with listener</string>
 </resources>
