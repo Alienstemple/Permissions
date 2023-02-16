@@ -22,10 +22,22 @@ class RequestPermissionActivity : AppCompatActivity() {
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED) {
             // Granted
+            Log.d(TAG, "Camera permission is already granted")
             Toast.makeText(this, "Camera permission is already granted", Toast.LENGTH_SHORT).show()
         } else {
             // Not granted
             requestCameraPermission()
+
+//            // check shouldLaunch
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, CAMERA)) {
+//                // AlertDialog
+//                Log.d(RequestPermissionListenerActivity.TAG,
+//                    "Camera not permitted after request, before showing alert dialog")
+//                showAlertDialog()
+//            } else {
+//                Log.d(TAG, "Request for the first time")
+//                requestCameraPermission()
+//            }
         }
     }
 
@@ -51,21 +63,19 @@ class RequestPermissionActivity : AppCompatActivity() {
                 updateStatus()
 
             } else {
-//                requestPermissionWithRationale()  // FIXME
-                showAlertDialog()
+                // check shouldLaunch
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, CAMERA)) {
+                    // AlertDialog
+                    Log.d(RequestPermissionListenerActivity.TAG,
+                        "Camera not permitted after request, before showing alert dialog")
+                    showAlertDialog()
+                } else {
+                    Log.d(TAG, "Camera permission is still DENIED")
+                    Toast.makeText(this, "Camera permission is still DENIED", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
             return
-        }
-    }
-
-    private fun requestPermissionWithRationale() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                CAMERA)
-        ) {
-            showAlertDialog()
-        } else {
-            // FIXME переходит сюда
-//            requestCameraPermission()
         }
     }
 
